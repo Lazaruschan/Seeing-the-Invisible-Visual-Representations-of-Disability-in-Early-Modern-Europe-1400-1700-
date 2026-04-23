@@ -53,7 +53,7 @@ const DATABASE = {
       location: "Metropolitan Museum, New York",
       url: "https://www.metmuseum.org/art/collection/search/436572",
       shortSummary: "A powerful rendering of the biblical miracle of sight restoration, demonstrating El Greco's distinctive elongated figures and dramatic use of colour.",
-      image: "../assets/I/1. El Greco, Christ Healing the Blind, 1570, Metropolitan Museum, New York..jpg",
+      image: "../assets/I/1.%20El%20Greco%2C%20Christ%20Healing%20the%20Blind%2C%201570%2C%20Metropolitan%20Museum%2C%20New%20York..jpg",
       tags: ["blindness", "healing", "religious", "miracle"]
     },
     {
@@ -65,7 +65,7 @@ const DATABASE = {
       location: "Museo del Prado, Madrid",
       url: "https://www.museodelprado.es/en/the-collection/art-work/miracles-of-the-doctor-saints-cosmas-and-damian/bfdb052e-4eb4-4aeb-9167-d1e2b247bb8d",
       shortSummary: "Depicts the famous miracle of Saints Cosmas and Damian transplanting a leg, one of the earliest surgical miracle images in Western art.",
-      image: "../assets/I/2. Fernando del Rincon, Miracles of the Black Leg. ca. 1510. Museo del Prado, Madrid..jpg",
+      image: "../assets/I/2.%20Fernando%20del%20Rincon%2C%20Miracles%20of%20the%20Black%20Leg.%20ca.%201510.%20Museo%20del%20Prado%2C%20Madrid..jpg",
       tags: ["surgery", "miracle", "saints", "prosthetics"]
     },
     {
@@ -77,7 +77,7 @@ const DATABASE = {
       location: "Santa Maria della Scala, Siena",
       url: null,
       shortSummary: "A rare secular depiction of hospital care and the treatment of the sick in a civic hospital setting, blending medical and charitable themes.",
-      image: "../assets/I/3. Domenico di Bartolo, Care of the Sick. 1440-41. Santa Maria della Scala, Siena..jpg",
+      image: "../assets/I/3.%20Domenico%20di%20Bartolo%2C%20Care%20of%20the%20Sick.%201440-41.%20Santa%20Maria%20della%20Scala%2C%20Siena..jpg",
       tags: ["hospital", "care", "medicine", "civic"]
     },
     {
@@ -89,7 +89,7 @@ const DATABASE = {
       location: "Liechtenstein Princely Collections, Vaduz",
       url: null,
       shortSummary: "A Baroque treatment of the healing miracle set within a classical architectural landscape.",
-      image: "../assets/I/4. Bartholomeus Breenbergh, Christ Healing a Blind Man. ca. 1635, Liechtenstein Princely Collections, Vaduz..jpg",
+      image: "../assets/I/4.%20Bartholomeus%20Breenbergh%2C%20Christ%20Healing%20a%20Blind%20Man.%20ca.%201635%2C%20Liechtenstein%20Princely%20Collections%2C%20Vaduz..jpg",
       tags: ["blindness", "healing", "religious", "baroque"]
     },
     {
@@ -101,7 +101,7 @@ const DATABASE = {
       location: "Rijksmuseum, Amsterdam",
       url: null,
       shortSummary: "Depicts the apostolic miracle of physical healing, showing the dynamic contrast between disability and divine cure.",
-      image: "../assets/I/5. Karel Dujardin, St. Paul Healing the Paralytic at Lystra. 1663. Rijksmuseum, Amsterdam. .jpg",
+      image: "../assets/I/5.%20Karel%20Dujardin%2C%20St.%20Paul%20Healing%20the%20Paralytic%20at%20Lystra.%201663.%20Rijksmuseum%2C%20Amsterdam.%20.jpg",
       tags: ["paralysis", "healing", "religious", "apostle"]
     },
     {
@@ -113,7 +113,7 @@ const DATABASE = {
       location: "Royal Library, Turin",
       url: null,
       shortSummary: "A miniature illustrating the biblical pool of Bethesda, where the disabled gathered hoping for miraculous healing.",
-      image: "../assets/I/6. Cristoforo de Predis, The Informs at the Pool at Bethesda. 1476. Royal Library, Turin..jpg",
+      image: "../assets/I/6.%20Cristoforo%20de%20Predis%2C%20The%20Informs%20at%20the%20Pool%20at%20Bethesda.%201476.%20Royal%20Library%2C%20Turin..jpg",
       tags: ["paralysis", "healing", "biblical", "manuscript"]
     },
     {
@@ -125,7 +125,7 @@ const DATABASE = {
       location: "National Gallery, London",
       url: null,
       shortSummary: "One of the most celebrated Baroque treatments of this biblical theme, notable for its compassionate rendering of the disabled figure.",
-      image: "../assets/I/7. Bartolome Esteban Murillo, Christ Heals the Paralytic at the Pool of Bethesda. 1667-1670. National Gallery, London..jpg",
+      image: "../assets/I/7.%20Bartolome%20Esteban%20Murillo%2C%20Christ%20Heals%20the%20Paralytic%20at%20the%20Pool%20of%20Bethesda.%201667-1670.%20National%20Gallery%2C%20London..jpg",
       tags: ["paralysis", "healing", "biblical", "baroque"]
     },
     {
@@ -137,7 +137,7 @@ const DATABASE = {
       location: "Minneapolis Art Museum, Minneapolis",
       url: "https://collections.artsmia.org/art/47081/st-peter-and-st-john-healing-cripple-at-gate-of-temple-albrecht-duerer",
       shortSummary: "An early print by Dürer depicting apostolic healing, one of his most detailed treatments of a disabled figure.",
-      image: "../assets/I/8. Albrecht Dürer, St Peter and St John Healing a Cripple at the Gate of the Temple. 1513. Minneapolis Art Museum, Minneapolis..jpg",
+      image: "../assets/I/8.%20Albrecht%20Du%CC%88rer%2C%20St%20Peter%20and%20St%20John%20Healing%20a%20Cripple%20at%20the%20Gate%20of%20the%20Temple.%201513.%20Minneapolis%20Art%20Museum%2C%20Minneapolis..jpg",
       tags: ["lameness", "healing", "print", "renaissance"]
     },
     {
@@ -149,7 +149,7 @@ const DATABASE = {
       location: "Uffizi, Florence",
       url: null,
       shortSummary: "An altarpiece in which disabled and sick figures are shown receiving divine compassion from the Virgin Mary.",
-      image: "../assets/I/9. Federico Barocci, Madonna of the People. 157501579. Uffizi, Florence. .jpg",
+      image: "../assets/I/9.%20Federico%20Barocci%2C%20Madonna%20of%20the%20People.%20157501579.%20Uffizi%2C%20Florence.%20.jpg",
       tags: ["healing", "religious", "altarpiece", "compassion"]
     },
     {
@@ -161,7 +161,7 @@ const DATABASE = {
       location: "Denver Art Museum, Denver",
       url: null,
       shortSummary: "A painting depicting spiritual healing through exorcism, blurring the boundaries between mental illness and demonic possession in late medieval thought.",
-      image: "../assets/I/10. Girolamo di Benvenuto. St. Catherine of Siena Exorcising a Possessed Woman. ca 1505. Denver Art Museum, Denver..png",
+      image: "../assets/I/10.%20Girolamo%20di%20Benvenuto.%20St.%20Catherine%20of%20Siena%20Exorcising%20a%20Possessed%20Woman.%20ca%201505.%20Denver%20Art%20Museum%2C%20Denver..png",
       tags: ["possession", "exorcism", "mental illness", "religious"]
     },
     {
@@ -173,7 +173,7 @@ const DATABASE = {
       location: "Museo del Prado, Madrid",
       url: null,
       shortSummary: "A satirical panel painting depicting a quack surgeon pretending to remove a 'stone of madness' from a patient's head, mocking both medical fraud and human gullibility.",
-      image: "../assets/II/1. Hieronymus Bosh, The Extraction of the Stone of Madness. ca 1494. Museo del Prado, Madrid..jpg",
+      image: "../assets/II/1.%20Hieronymus%20Bosh%2C%20The%20Extraction%20of%20the%20Stone%20of%20Madness.%20ca%201494.%20Museo%20del%20Prado%2C%20Madrid..jpg",
       tags: ["madness", "surgery", "satire", "quackery"]
     },
     {
@@ -185,7 +185,7 @@ const DATABASE = {
       location: "Museo Nazionale di Capodimonte, Naples",
       url: null,
       shortSummary: "Brueghel's masterpiece depicting six blind men in a chain, each inevitably leading the next into a ditch — a moral parable rendered with extraordinary visual specificity.",
-      image: "../assets/II/2. Pieter Brueghel the Elder. The Blind Leading the Blind. 1568. Museo Nazionale di Capodimonte, Naples. .jpeg",
+      image: "../assets/II/2.%20Pieter%20Brueghel%20the%20Elder.%20The%20Blind%20Leading%20the%20Blind.%201568.%20Museo%20Nazionale%20di%20Capodimonte%2C%20Naples.%20.jpeg",
       tags: ["blindness", "parable", "social commentary", "renaissance"]
     },
     {
@@ -197,7 +197,7 @@ const DATABASE = {
       location: "Louvre Museum, Paris",
       url: null,
       shortSummary: "A rare dignified portrait of a begging boy with a clubfoot, shown smiling and holding a paper requesting alms — notable for its humanity and directness.",
-      image: "../assets/II/3. Jusepe Ribera, The Clubfoot. 1642. Louvre Museum, Paris. .jpg",
+      image: "../assets/II/3.%20Jusepe%20Ribera%2C%20The%20Clubfoot.%201642.%20Louvre%20Museum%2C%20Paris.%20.jpg",
       tags: ["clubfoot", "begging", "poverty", "portraiture"]
     },
     {
@@ -209,7 +209,7 @@ const DATABASE = {
       location: "National Library of Sweden, Stockholm",
       url: "https://www.independentliving.org/docs5/mmiles2.html",
       shortSummary: "A costume book illustration depicting a disabled person as part of a broader survey of social types in Ottoman and European society.",
-      image: "../assets/II/4. Anonymous Artist, Plate 94. Rålamb Book of Costumes. 1657-1658. National Library of Sweden, Stockholm. .jpg",
+      image: "../assets/II/4.%20Anonymous%20Artist%2C%20Plate%2094.%20Ra%CC%8Alamb%20Book%20of%20Costumes.%201657-1658.%20National%20Library%20of%20Sweden%2C%20Stockholm.%20.jpg",
       tags: ["costume", "disability", "social types", "manuscript"]
     },
     {
@@ -221,7 +221,7 @@ const DATABASE = {
       location: "Metropolitan Museum, New York",
       url: "https://www.metmuseum.org/art/collection/search/910384",
       shortSummary: "A genre painting depicting a disabled street peddler carrying a pack of books, offering a rare glimpse into the working lives of people with disabilities in early modern Europe.",
-      image: "../assets/II/5. Master of the Canesso Peddler, A Book Peddler. ca 1670-1690. Metropolitan Museum, New York..jpeg",
+      image: "../assets/II/5.%20Master%20of%20the%20Canesso%20Peddler%2C%20A%20Book%20Peddler.%20ca%201670-1690.%20Metropolitan%20Museum%2C%20New%20York..jpeg",
       tags: ["peddler", "street life", "working class", "genre painting"]
     },
     {
@@ -233,7 +233,7 @@ const DATABASE = {
       location: "Museo Nazionale di Capodimonte, Naples",
       url: null,
       shortSummary: "A triple portrait of court 'curiosities' including hypertrichosis, dwarfism, and apparent intellectual disability, reflecting the early modern fascination with bodily difference.",
-      image: "../assets/II/6. Agostino Carracci, Triple Portrait- Hairy Harry, Mad Peter and Tiny Amon. 1596-1600, Museo Nazionale di Capodimonte, Naples..jpg",
+      image: "../assets/II/6.%20Agostino%20Carracci%2C%20Triple%20Portrait-%20Hairy%20Harry%2C%20Mad%20Peter%20and%20Tiny%20Amon.%201596-1600%2C%20Museo%20Nazionale%20di%20Capodimonte%2C%20Naples..jpg",
       tags: ["court curiosities", "dwarfism", "hypertrichosis", "portraiture"]
     },
     {
@@ -245,7 +245,7 @@ const DATABASE = {
       location: "Chatsworth House, Devonshire",
       url: "https://www.chatsworth.org/visit-chatsworth/chatsworth-estate/art-archives/devonshire-collections/old-master-drawings/a-hunchback-boy/",
       shortSummary: "A sympathetic drawing of a hunchback boy, notable for its directness and lack of moralizing, presenting disability as a physical condition rather than a spiritual statement.",
-      image: "../assets/II/7. Annibale Carracci, Portrait of a Hunchback Boy. 1580s. Chatsworth House, Devonshire..jpg",
+      image: "../assets/II/7.%20Annibale%20Carracci%2C%20Portrait%20of%20a%20Hunchback%20Boy.%201580s.%20Chatsworth%20House%2C%20Devonshire..jpg",
       tags: ["kyphosis", "drawing", "genre", "portraiture"]
     },
     {
@@ -257,7 +257,7 @@ const DATABASE = {
       location: "Metropolitan Museum, New York",
       url: "https://www.metmuseum.org/art/collection/search/359805",
       shortSummary: "An etching depicting the aged blind Tobit from the Book of Tobit, a subject Rembrandt returned to multiple times throughout his career.",
-      image: "../assets/II/8. Rembrandt, The Blindness of Tobit. 1651. Metropolitan Museum, New York.jpeg",
+      image: "../assets/II/8.%20Rembrandt%2C%20The%20Blindness%20of%20Tobit.%201651.%20Metropolitan%20Museum%2C%20New%20York.jpeg",
       tags: ["blindness", "old age", "etching", "biblical"]
     },
     {
@@ -269,7 +269,7 @@ const DATABASE = {
       location: "British Museum, London",
       url: null,
       shortSummary: "A print from a series depicting street trades in Bologna, showing a disabled seller as part of the urban working landscape.",
-      image: "../assets/II/9. Giuseppe Maria Mitelli, A Street Seller of Shoes. 1660. British Museum, London..jpg",
+      image: "../assets/II/9.%20Giuseppe%20Maria%20Mitelli%2C%20A%20Street%20Seller%20of%20Shoes.%201660.%20British%20Museum%2C%20London..jpg",
       tags: ["street trade", "disability", "print", "urban life"]
     },
     {
@@ -281,7 +281,7 @@ const DATABASE = {
       location: "Real Biblioteca del Monasterio de San Lorenzo de El Escorial, Madrid",
       url: null,
       shortSummary: "A medieval manuscript illumination depicting a deaf boy — one of the earliest known images of deafness as a distinct category of disability in Western art.",
-      image: "../assets/II/10. Anonymous Artist, A Prelingually Deaf Boy in Soisson. ca. 1280. Real Biblioteca del Monasterio de San Lorenzo de El Escorial, Madrid..png",
+      image: "../assets/II/10.%20Anonymous%20Artist%2C%20A%20Prelingually%20Deaf%20Boy%20in%20Soisson.%20ca.%201280.%20Real%20Biblioteca%20del%20Monasterio%20de%20San%20Lorenzo%20de%20El%20Escorial%2C%20Madrid..png",
       tags: ["deafness", "medieval", "manuscript", "childhood"]
     },
     {
@@ -293,7 +293,7 @@ const DATABASE = {
       location: "Château de Blois, Blois",
       url: null,
       shortSummary: "A formal court portrait of Antonietta Gonzalez, who had hypertrichosis, presented with full dignity as a member of the Gonzalez family documented across several courts.",
-      image: "../assets/III/1. Lavinia Fontana, Portrait of Antonietta Gonzalez. 1595, Château de Blois, Blois..jpg",
+      image: "../assets/III/1.%20Lavinia%20Fontana%2C%20Portrait%20of%20Antonietta%20Gonzalez.%201595%2C%20Cha%CC%82teau%20de%20Blois%2C%20Blois..jpg",
       tags: ["hypertrichosis", "court portrait", "female artist", "identity"]
     },
     {
@@ -305,7 +305,7 @@ const DATABASE = {
       location: "Museo del Prado, Madrid",
       url: "https://www.taylorfrancis.com/chapters/edit/10.4324/9781003048602-8/destierro-desenga%C3%B1o-colin-sanborn",
       shortSummary: "A court portrait of a jester-dwarf, painted with psychological complexity and painterly freedom.",
-      image: "../assets/III/2. Diego Velazquez, Portrait of Don Diego de Alcedo. 1545. Museo del Prado, Madrid..jpg",
+      image: "../assets/III/2.%20Diego%20Velazquez%2C%20Portrait%20of%20Don%20Diego%20de%20Alcedo.%201545.%20Museo%20del%20Prado%2C%20Madrid..jpg",
       tags: ["dwarfism", "court jester", "portraiture", "velazquez"]
     },
     {
@@ -317,7 +317,7 @@ const DATABASE = {
       location: "Museo del Prado, Madrid",
       url: "https://www.taylorfrancis.com/chapters/edit/10.4324/9781003048602-8/destierro-desenga%C3%B1o-colin-sanborn",
       shortSummary: "One of Velázquez's most celebrated court portraits, depicting a court dwarf with intense directness and psychological depth.",
-      image: "../assets/III/3. Diego Velazquez, Portrait of Sebastian de Morra. 1544. Museo del Prado Madrid. .jpg",
+      image: "../assets/III/3.%20Diego%20Velazquez%2C%20Portrait%20of%20Sebastian%20de%20Morra.%201544.%20Museo%20del%20Prado%20Madrid.%20.jpg",
       tags: ["dwarfism", "court jester", "portraiture", "velazquez"]
     },
     {
@@ -329,7 +329,7 @@ const DATABASE = {
       location: "Pitti Palace, Florence",
       url: "https://www.uffizi.it/en/news/nano-morgante-pittien",
       shortSummary: "A double-sided painted portrait of Nano Morgante, the Medici court dwarf, shown from front and back — a uniquely playful yet complex statement on disability and courtly amusement.",
-      image: "../assets/III/4. Bronzino, Portrait of Baccio di Bartolo (Nano Morgante). 1552. Pitti Palace, Florence. .jpg",
+      image: "../assets/III/4.%20Bronzino%2C%20Portrait%20of%20Baccio%20di%20Bartolo%20(Nano%20Morgante).%201552.%20Pitti%20Palace%2C%20Florence.%20.jpg",
       tags: ["dwarfism", "court", "Medici", "portraiture"]
     },
     {
@@ -341,7 +341,7 @@ const DATABASE = {
       location: "Norton Simon Museum, Los Angeles",
       url: "https://www.nortonsimon.org/art/detail/F.1965.1.052.P/",
       shortSummary: "From Ribera's series on the Five Senses, depicting touch through an image of blindness — a man examining an object by feel, reflecting the relationship between sensory loss and heightened remaining senses.",
-      image: "../assets/III/5. Jusepe Ribera, The Sense of Touch. 1615-1616. Norton Simon Museum, Los Angeles..jpg",
+      image: "../assets/III/5.%20Jusepe%20Ribera%2C%20The%20Sense%20of%20Touch.%201615-1616.%20Norton%20Simon%20Museum%2C%20Los%20Angeles..jpg",
       tags: ["blindness", "senses", "allegory", "touch"]
     },
     {
@@ -353,7 +353,7 @@ const DATABASE = {
       location: "The British Museum, London",
       url: null,
       shortSummary: "An engraving from a collection of remarkable persons, documenting a woman with limb difference in formal dress.",
-      image: "../assets/III/6. Giovanni Battista de’ Cavalieri, A Woman with no Legs in Elegant Dress on a Table. 1585. The British Museum, London. .jpg",
+      image: "../assets/III/6.%20Giovanni%20Battista%20de%E2%80%99%20Cavalieri%2C%20A%20Woman%20with%20no%20Legs%20in%20Elegant%20Dress%20on%20a%20Table.%201585.%20The%20British%20Museum%2C%20London.%20.jpg",
       tags: ["limb difference", "engraving", "identity", "remarkable persons"]
     },
     {
@@ -365,7 +365,7 @@ const DATABASE = {
       location: "National Gallery of Art, Washington",
       url: "https://www.nga.gov/collection/art-object-page.41651.html",
       shortSummary: "A formal royal portrait that includes the famous court dwarf Sir Jeffrey Hudson, whose inclusion complicates notions of status, hierarchy, and disability in court culture.",
-      image: "../assets/III/7. Antony van Dyck, Portrait of Queen Henrietta Maria with Sir Jeffrey Hudson. 1633. National Gallery of Art, Washington. .jpg",
+      image: "../assets/III/7.%20Antony%20van%20Dyck%2C%20Portrait%20of%20Queen%20Henrietta%20Maria%20with%20Sir%20Jeffrey%20Hudson.%201633.%20National%20Gallery%20of%20Art%2C%20Washington.%20.jpg",
       tags: ["dwarfism", "court portrait", "royalty", "van dyck"]
     },
     {
@@ -377,7 +377,7 @@ const DATABASE = {
       location: "Museo del Prado, Madrid",
       url: "https://www.museodelprado.es/en/the-collection/art-work/eugenia-martinez-vallejo-clothed/f8092cbd-8dd4-4c63-af63-1402940150f0",
       shortSummary: "A striking portrait of Eugenia Martinez Vallejo, known as 'La Monstrua', shown in formal court dress — one of a pair of portraits depicting her clothed and unclothed.",
-      image: "../assets/III/8. Juan Carreño de Miranda, Portrait of Eugenia Martinez Vallejo. 1680. Museo del Prado, Madrid..jpg",
+      image: "../assets/III/8.%20Juan%20Carren%CC%83o%20de%20Miranda%2C%20Portrait%20of%20Eugenia%20Martinez%20Vallejo.%201680.%20Museo%20del%20Prado%2C%20Madrid..jpg",
       tags: ["obesity", "court portrait", "identity", "female subject"]
     },
     {
@@ -389,7 +389,7 @@ const DATABASE = {
       location: "Meadows Museum, Dallas",
       url: "https://www.liebertpub.com/doi/10.1001/archfaci.9.2.152",
       shortSummary: "A court portrait of a dwarf whose identity and condition have been the subject of historical and medical inquiry.",
-      image: "../assets/III/9. Juan Carreño de Miranda, Portrait of the Dwarf Michol. ca. 1670-82, Meadows Museum, Dallas..jpeg",
+      image: "../assets/III/9.%20Juan%20Carren%CC%83o%20de%20Miranda%2C%20Portrait%20of%20the%20Dwarf%20Michol.%20ca.%201670-82%2C%20Meadows%20Museum%2C%20Dallas..jpeg",
       tags: ["dwarfism", "court portrait", "identity", "Prado"]
     },
     {
@@ -401,7 +401,7 @@ const DATABASE = {
       location: "National Gallery, London",
       url: "https://news.artnet.com/art-world/ugly-duchess-massys-leonardo-da-vinci-2270566",
       shortSummary: "A satirical portrait traditionally read as a grotesque study of age or physical difference, now reconsidered as potentially depicting a medical condition such as Paget's disease.",
-      image: "../assets/III/10. Quinten Massys, The Ugly Duchess. 1513. National Gallery, London. .jpg",
+      image: "../assets/III/10.%20Quinten%20Massys%2C%20The%20Ugly%20Duchess.%201513.%20National%20Gallery%2C%20London.%20.jpg",
       tags: ["grotesque", "satire", "medical condition", "female subject"]
     },
     {
@@ -413,7 +413,7 @@ const DATABASE = {
       location: "Milan State Archive, Milan",
       url: "https://onlinelibrary.wiley.com/doi/full/10.1111/rest.12730",
       shortSummary: "A document accompanied by a visual record of a woman with a disability receiving a bequest — an intersection of legal, economic, and visual history.",
-      image: "../assets/IV/1. Luca Riva, Bequest to Laura Farina. 1624. Milan State Archive, Milan. .png",
+      image: "../assets/IV/1.%20Luca%20Riva%2C%20Bequest%20to%20Laura%20Farina.%201624.%20Milan%20State%20Archive%2C%20Milan.%20.png",
       tags: ["legal document", "bequest", "disability history", "archive"]
     },
     {
@@ -425,7 +425,7 @@ const DATABASE = {
       location: "Teylers Museum, Haarlem",
       url: "https://sammlung.staedelmuseum.de/en/work/four-studies-of-a-right-hand",
       shortSummary: "Goltzius, who had a permanently deformed right hand from a childhood accident, made his own hand a subject of meticulous artistic study — an extraordinary act of self-documentation.",
-      image: "../assets/IV/2. Hendrick Goltzius, The Right Hand. 1588. Teylers Museum, Haarlem..jpeg",
+      image: "../assets/IV/2.%20Hendrick%20Goltzius%2C%20The%20Right%20Hand.%201588.%20Teylers%20Museum%2C%20Haarlem..jpeg",
       tags: ["hand", "disability", "self-portrait", "drawing"]
     },
     {
@@ -437,7 +437,7 @@ const DATABASE = {
       location: "Private Collection, UK",
       url: null,
       shortSummary: "A portrait of a young girl that records physical difference within the conventions of formal portraiture.",
-      image: "../assets/IV/3. Jan Jansz, Portrait of a Girl in a Red Dress with a Dog in a Landscape. Ca 1640. Private Collection, UK. .jpg",
+      image: "../assets/IV/3.%20Jan%20Jansz%2C%20Portrait%20of%20a%20Girl%20in%20a%20Red%20Dress%20with%20a%20Dog%20in%20a%20Landscape.%20Ca%201640.%20Private%20Collection%2C%20UK.%20.jpg",
       tags: ["childhood", "portraiture", "disability", "private collection"]
     },
     {
@@ -449,7 +449,7 @@ const DATABASE = {
       location: "Landesmuseum, Württemberg",
       url: "https://blog.landesmuseum-stuttgart.de/vielseitig-und-selbstbewusst-neuerwerbung-theodor-steibs-selbstbildnis-beim-schreiben-oder-zeichnen/",
       shortSummary: "A self-portrait by an artist born without hands who learned to draw and write with his feet — shown in the act of artistic making, asserting creative identity despite impairment.",
-      image: "../assets/IV/4. Theodorus Steib, Self-Portrait. 1651.Landersmuseum, Württemberg..jpg",
+      image: "../assets/IV/4.%20Theodorus%20Steib%2C%20Self-Portrait.%201651.Landersmuseum%2C%20Wu%CC%88rttemberg..jpg",
       tags: ["self-portrait", "limb difference", "creative practice", "artist"]
     },
     {
@@ -461,7 +461,7 @@ const DATABASE = {
       location: "Galleria Cesati, Milan",
       url: "https://www.finestresullarte.info/en/works-and-artists/the-extraordinary-story-of-a-blind-sculptor-giovanni-gonnelli-the-blind-man-of-gambassi",
       shortSummary: "A bust by Gonnelli, the 'Blind Man of Gambassi', who became a sculptor after losing his sight — a remarkable example of artistic adaptation.",
-      image: "../assets/IV/5. Giovanni Gonnelli, Male Bust. 1646. Galleria Cesati, Milan. .jpg",
+      image: "../assets/IV/5.%20Giovanni%20Gonnelli%2C%20Male%20Bust.%201646.%20Galleria%20Cesati%2C%20Milan.%20.jpg",
       tags: ["blindness", "sculpture", "creative practice", "adaptation"]
     },
     {
@@ -473,7 +473,7 @@ const DATABASE = {
       location: "National Gallery, London",
       url: "https://www.nationalgallery.org.uk/paintings/hendrick-avercamp-a-scene-on-the-ice-near-a-town",
       shortSummary: "A winter landscape by Avercamp, who was deaf and mute, representing disability through artistic practice rather than subject matter.",
-      image: "../assets/IV/6. Hendrick Avercamp, A Scene on Ice near a Town. ca. 1615, National Gallery, London..jpg",
+      image: "../assets/IV/6.%20Hendrick%20Avercamp%2C%20A%20Scene%20on%20Ice%20near%20a%20Town.%20ca.%201615%2C%20National%20Gallery%2C%20London..jpg",
       tags: ["deafness", "winter landscape", "artist disability", "genre"]
     },
     {
@@ -485,7 +485,7 @@ const DATABASE = {
       location: "Metropolitan Museum, New York",
       url: "https://www.metmuseum.org/art/collection/search/49237",
       shortSummary: "Works by the Chinese scholar-painter Gao Fenghan, who continued painting with his non-dominant left hand after paralysis claimed the use of his right hand.",
-      image: "../assets/IV/7. Gao Fenghan, Landscapes and Calligraphy. 1736, Metropolitan Museum, New York..jpg",
+      image: "../assets/IV/7.%20Gao%20Fenghan%2C%20Landscapes%20and%20Calligraphy.%201736%2C%20Metropolitan%20Museum%2C%20New%20York..jpg",
       tags: ["paralysis", "calligraphy", "adaptation", "Chinese art"]
     },
     {
@@ -497,7 +497,7 @@ const DATABASE = {
       location: "Tate Britain, London",
       url: "https://academic.oup.com/oaj/article/46/3/357/7615843",
       shortSummary: "Reynolds's self-portrait in which he presents himself holding a hand to his ear — a direct acknowledgement of his own progressive deafness.",
-      image: "../assets/IV/8. Joshua Reynolds, Self-Portrait as a Deaf man. 1775. Tate Britain, London..jpg",
+      image: "../assets/IV/8.%20Joshua%20Reynolds%2C%20Self-Portrait%20as%20a%20Deaf%20man.%201775.%20Tate%20Britain%2C%20London..jpg",
       tags: ["deafness", "self-portrait", "identity", "artist disability"]
     },
     {
@@ -509,7 +509,7 @@ const DATABASE = {
       location: "Louvre Museum, Paris",
       url: "https://collections.louvre.fr/en/ark:/53355/cl020003809",
       shortSummary: "A theoretical painting exploring the paragone debate about the relative merits of painting and sculpture — relevant to disability through its engagement with tactile versus visual perception.",
-      image: "../assets/IV/9. Giovanni Francesco Barbieri (Guercino), Allegory of the Superiority of Painting over Sculpture. 1635-1640. Louvre Museum, Paris. .png",
+      image: "../assets/IV/9.%20Giovanni%20Francesco%20Barbieri%20(Guercino)%2C%20Allegory%20of%20the%20Superiority%20of%20Painting%20over%20Sculpture.%201635-1640.%20Louvre%20Museum%2C%20Paris.%20.png",
       tags: ["paragone", "allegory", "painting vs sculpture", "theory"]
     },
     {
@@ -521,7 +521,7 @@ const DATABASE = {
       location: "Royal Library, Turin",
       url: null,
       shortSummary: "A companion manuscript illumination to Predis's Pool of Bethesda, depicting a miracle that speaks directly to deafness and muteness as categories of disability in biblical narrative.",
-      image: "../assets/IV/10. Cristoforo de Predis, The Healing of the Deaf and Mute Boy. 1476. Royal Library, Turin.jpg",
+      image: "../assets/IV/10.%20Cristoforo%20de%20Predis%2C%20The%20Healing%20of%20the%20Deaf%20and%20Mute%20Boy.%201476.%20Royal%20Library%2C%20Turin.jpg",
       tags: ["deafness", "muteness", "healing", "manuscript"]
     }
   ]
