@@ -122,9 +122,16 @@ function renderHome() {
 function renderArtworkCard(art) {
   const cat = getCategoryById(art.categoryId);
   const i = catIdx(cat);
+
+  const imageContent = art.image 
+    ? `<img src="${art.image}" alt="${art.title}" class="artwork-thumb-img">`
+    : `<div class="artwork-thumb-placeholder" style="background:${CAT_GRADIENTS[i]};color:${CAT_COLORS[i]}">${CAT_ICONS[i]}</div>`;
+
   return `
     <a class="artwork-card" href="#artwork/${art.id}" data-nav="#artwork/${art.id}">
-      <div class="artwork-thumb" style="background:${CAT_GRADIENTS[i]};color:${CAT_COLORS[i]}">${CAT_ICONS[i]}</div>
+      <div class="artwork-thumb">
+        ${imageContent}
+      </div>
       <div class="artwork-card-body">
         <p class="artwork-card-category" style="color:${CAT_COLORS[i]}">${cat.title}</p>
         <p class="artwork-card-title">${art.title}</p>
@@ -170,6 +177,10 @@ function renderArtworkDetail(id) {
   const prev = catArtworks[pos - 1];
   const next = catArtworks[pos + 1];
 
+  const imageContent = art.image 
+    ? `<img src="${art.image}" alt="${art.title}" class="artwork-detail-img">`
+    : `<div class="artwork-detail-placeholder" style="background:${CAT_GRADIENTS[i]};color:${CAT_COLORS[i]}">${CAT_ICONS[i]}</div>`;
+
   return `
     <div class="artwork-detail page-fade-in">
       <div class="breadcrumb">
@@ -180,7 +191,9 @@ function renderArtworkDetail(id) {
         <span>${art.title}</span>
       </div>
 
-      <div class="artwork-detail-image" style="background:${CAT_GRADIENTS[i]};color:${CAT_COLORS[i]}">${CAT_ICONS[i]}</div>
+      <div class="artwork-detail-image-container">
+        ${imageContent}
+      </div>
 
       <div class="artwork-detail-category-pill" style="color:${CAT_COLORS[i]};background:${CAT_GRADIENTS[i]};border:1px solid ${CAT_COLORS[i]}33">
         <span style="width:6px;height:6px;background:${CAT_COLORS[i]};border-radius:50%;display:inline-block"></span>
