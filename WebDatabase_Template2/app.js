@@ -125,9 +125,16 @@ function renderHome() {
 
 function renderArtworkCard(art) {
   const i = catIndex(getCategoryById(art.categoryId));
+  
+  const imageContent = art.image 
+    ? `<img src="${art.image}" alt="${art.title}" class="artwork-thumb-img">`
+    : `<div class="artwork-thumb-placeholder" style="color:${DOT_COLORS[i]}">${MONO_ICONS[i]}</div>`;
+
   return `
     <a class="artwork-card" href="#artwork/${art.id}" data-nav="#artwork/${art.id}">
-      <div class="artwork-thumb" style="color:${DOT_COLORS[i]}">${MONO_ICONS[i]}</div>
+      <div class="artwork-thumb">
+        ${imageContent}
+      </div>
       <div class="artwork-card-body">
         <p class="artwork-card-id">#${String(art.id).padStart(3,'0')}</p>
         <p class="artwork-card-title">${art.title}</p>
@@ -172,6 +179,10 @@ function renderArtworkDetail(id) {
   const prev = catArtworks[pos - 1];
   const next = catArtworks[pos + 1];
 
+  const imageContent = art.image 
+    ? `<img src="${art.image}" alt="${art.title}" class="artwork-detail-img">`
+    : `<div class="artwork-detail-placeholder" style="color:${DOT_COLORS[idx]}">${MONO_ICONS[idx]}</div>`;
+
   return `
     <div class="artwork-detail page-fade-in">
       <div class="breadcrumb">
@@ -182,7 +193,9 @@ function renderArtworkDetail(id) {
         <span>artwork_${String(art.id).padStart(3,'0')}</span>
       </div>
 
-      <div class="artwork-detail-image" style="color:${DOT_COLORS[idx]}">${MONO_ICONS[idx]}</div>
+      <div class="artwork-detail-image-container">
+        ${imageContent}
+      </div>
 
       <p class="artwork-detail-id">#${String(art.id).padStart(3,'0')} // ${cat.title}</p>
       <h1 class="artwork-detail-title">${art.title}</h1>
