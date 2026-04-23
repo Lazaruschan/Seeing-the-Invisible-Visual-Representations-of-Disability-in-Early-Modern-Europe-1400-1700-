@@ -109,10 +109,15 @@ function renderHome() {
 function renderArtworkCard(art) {
   const cat = getCategoryById(art.categoryId);
   const emoji = EMOJI_MAP[art.categoryId] || '◆';
+  
+  const imageContent = art.image 
+    ? `<img src="${art.image}" alt="${art.title}" class="artwork-thumb-img">`
+    : `<div class="artwork-thumb-placeholder">${emoji}</div>`;
+
   return `
     <a class="artwork-card" href="#artwork/${art.id}" data-nav="#artwork/${art.id}">
       <div class="artwork-thumb">
-        <div class="artwork-thumb-placeholder">${emoji}</div>
+        ${imageContent}
       </div>
       <div class="artwork-card-body">
         <p class="artwork-card-title">${art.title}</p>
@@ -155,6 +160,10 @@ function renderArtworkDetail(id) {
   const next = catArtworks[idx + 1];
   const emoji = EMOJI_MAP[art.categoryId] || '◆';
 
+  const imageContent = art.image 
+    ? `<img src="${art.image}" alt="${art.title}" class="artwork-detail-img">`
+    : `<div class="artwork-detail-placeholder">${emoji}</div>`;
+
   return `
     <div class="artwork-detail page-fade-in">
       <div class="breadcrumb">
@@ -165,7 +174,9 @@ function renderArtworkDetail(id) {
         <span>${art.title}</span>
       </div>
 
-      <div class="artwork-detail-image">${emoji}</div>
+      <div class="artwork-detail-image-container">
+        ${imageContent}
+      </div>
 
       <h1 class="artwork-detail-title">${art.title}</h1>
       <p class="artwork-detail-artist">${art.artist}</p>
