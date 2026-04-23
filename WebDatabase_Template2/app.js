@@ -31,6 +31,46 @@ function encodePath(p) {
     .join('/');
 }
 
+function getImageSources(path) {
+  if (!path) return { primary: "", fallback: "" };
+
+  const original = path.trim();
+  const normalized = normalizeImagePath(original);
+  let fallback = "";
+
+  if (/^\.\.\/(I|II|III|IV)\//.test(original)) {
+    fallback = original;
+  } else if (/^\.\.\/assets\/(I|II|III|IV)\//.test(original)) {
+    fallback = original.replace(/^\.\.\/assets\/(I|II|III|IV)\//, "../$1/");
+  }
+
+  const primaryEncoded = encodePath(normalized);
+  const fallbackEncoded = fallback && fallback !== normalized ? encodePath(fallback) : "";
+
+  return { primary: primaryEncoded, fallback: fallbackEncoded };
+}
+
+function renderArtworkImage(path, alt, className, placeholderHtml) {
+  if (!path) return placeholderHtml;
+
+  const { primary, fallback } = getImageSources(path);
+  const fallbackAttr = fallback ? ` data-fallback-src="${fallback}"` : "";
+
+  return `<img src="${primary}" alt="${alt}" class="${className}" loading="lazy"${fallbackAttr} onerror="handleImageLoadError(this)">`;
+}
+
+function handleImageLoadError(img) {
+  const fallback = img.getAttribute("data-fallback-src");
+
+  if (fallback && !img.dataset.fallbackTried) {
+    img.dataset.fallbackTried = "1";
+    img.src = fallback;
+    return;
+  }
+
+  img.style.display = "none";
+}
+
 const MONO_ICONS = ["▪", "▫", "◆", "◇"];
 const DOT_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#a855f7"];
 
@@ -152,9 +192,12 @@ function renderHome() {
 function renderArtworkCard(art) {
   const i = catIndex(getCategoryById(art.categoryId));
   
-  const imageContent = art.image 
-    ? `<img src="${encodePath(art.image)}" alt="${art.title}" class="artwork-thumb-img">`
-    : `<div class="artwork-thumb-placeholder" style="color:${DOT_COLORS[i]}">${MONO_ICONS[i]}</div>`;
+  const imageContent = renderArtworkImage(
+    art.image,
+    art.title,
+    "artwork-thumb-img",
+    `<div class="artwork-thumb-placeholder" style="color:${DOT_COLORS[i]}">${MONO_ICONS[i]}</div>`
+  );
 
   return `
     <a class="artwork-card" href="#artwork/${art.id}" data-nav="#artwork/${art.id}">
@@ -205,9 +248,12 @@ function renderArtworkDetail(id) {
   const prev = catArtworks[pos - 1];
   const next = catArtworks[pos + 1];
 
-  const imageContent = art.image 
-    ? `<img src="${encodePath(art.image)}" alt="${art.title}" class="artwork-detail-img">`
-    : `<div class="artwork-detail-placeholder" style="color:${DOT_COLORS[idx]}">${MONO_ICONS[idx]}</div>`;
+  const imageContent = renderArtworkImage(
+    art.image,
+    art.title,
+    "artwork-detail-img",
+    `<div class="artwork-detail-placeholder" style="color:${DOT_COLORS[idx]}">${MONO_ICONS[idx]}</div>`
+  );
 
   return `
     <div class="artwork-detail page-fade-in">
