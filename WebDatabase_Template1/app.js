@@ -5,6 +5,33 @@
 
 const { artworks, categories, project } = DATABASE;
 
+function normalizeImagePath(path) {
+  if (!path) return path;
+
+  let normalized = path.trim();
+
+  // Route group folders through the shared assets directory.
+  normalized = normalized.replace(/^\.\.\/(I|II|III|IV)\//, "../assets/$1/");
+
+  // Normalize known filename encoding mismatches.
+  normalized = normalized
+    .replace(/\u00CC\u02C6/g, "\u0308") // I^ -> combining diaeresis
+    .replace(/\u00CC\u0160/g, "\u030A") // IS -> combining ring
+    .replace(/\u00CC\u201A/g, "\u0302") // I, -> combining circumflex
+    .replace(/\u00CC\u0192/g, "\u0303") // Iƒ -> combining tilde
+    .replace(/\u00E2\u20AC\u2122/g, "\u2019"); // â€™ -> right single quote
+
+  return normalized;
+}
+
+// Encode a file path so spaces and special chars work in img src attributes
+function encodePath(p) {
+  return normalizeImagePath(p)
+    .split('/')
+    .map((seg, i) => i === 0 ? seg : encodeURIComponent(seg).replace(/%2F/gi, '/'))
+    .join('/');
+}
+
 const EMOJI_MAP = {
   "group-1": "✦",
   "group-2": "◈",
@@ -111,7 +138,7 @@ function renderArtworkCard(art) {
   const emoji = EMOJI_MAP[art.categoryId] || '◆';
   
   const imageContent = art.image 
-    ? `<img src="${art.image}" alt="${art.title}" class="artwork-thumb-img">`
+    ? `<img src="${encodePath(art.image)}" alt="${art.title}" class="artwork-thumb-img">`
     : `<div class="artwork-thumb-placeholder">${emoji}</div>`;
 
   return `
@@ -161,7 +188,7 @@ function renderArtworkDetail(id) {
   const emoji = EMOJI_MAP[art.categoryId] || '◆';
 
   const imageContent = art.image 
-    ? `<img src="${art.image}" alt="${art.title}" class="artwork-detail-img">`
+    ? `<img src="${encodePath(art.image)}" alt="${art.title}" class="artwork-detail-img">`
     : `<div class="artwork-detail-placeholder">${emoji}</div>`;
 
   return `

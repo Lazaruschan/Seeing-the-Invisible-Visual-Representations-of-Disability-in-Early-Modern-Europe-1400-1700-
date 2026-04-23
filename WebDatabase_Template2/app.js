@@ -5,6 +5,32 @@
 
 const { artworks, categories, project } = DATABASE;
 
+function normalizeImagePath(path) {
+  if (!path) return path;
+
+  let normalized = path.trim();
+
+  // Route group folders through the shared assets directory.
+  normalized = normalized.replace(/^\.\.\/(I|II|III|IV)\//, "../assets/$1/");
+
+  // Normalize known filename encoding mismatches.
+  normalized = normalized
+    .replace(/\u00CC\u02C6/g, "\u0308") // I^ -> combining diaeresis
+    .replace(/\u00CC\u0160/g, "\u030A") // IS -> combining ring
+    .replace(/\u00CC\u201A/g, "\u0302") // I, -> combining circumflex
+    .replace(/\u00CC\u0192/g, "\u0303") // Iƒ -> combining tilde
+    .replace(/\u00E2\u20AC\u2122/g, "\u2019"); // â€™ -> right single quote
+
+  return normalized;
+}
+
+function encodePath(p) {
+  return normalizeImagePath(p)
+    .split('/')
+    .map((seg, i) => i === 0 ? seg : encodeURIComponent(seg).replace(/%2F/gi, '/'))
+    .join('/');
+}
+
 const MONO_ICONS = ["▪", "▫", "◆", "◇"];
 const DOT_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#a855f7"];
 
@@ -127,7 +153,7 @@ function renderArtworkCard(art) {
   const i = catIndex(getCategoryById(art.categoryId));
   
   const imageContent = art.image 
-    ? `<img src="${art.image}" alt="${art.title}" class="artwork-thumb-img">`
+    ? `<img src="${encodePath(art.image)}" alt="${art.title}" class="artwork-thumb-img">`
     : `<div class="artwork-thumb-placeholder" style="color:${DOT_COLORS[i]}">${MONO_ICONS[i]}</div>`;
 
   return `
@@ -180,7 +206,7 @@ function renderArtworkDetail(id) {
   const next = catArtworks[pos + 1];
 
   const imageContent = art.image 
-    ? `<img src="${art.image}" alt="${art.title}" class="artwork-detail-img">`
+    ? `<img src="${encodePath(art.image)}" alt="${art.title}" class="artwork-detail-img">`
     : `<div class="artwork-detail-placeholder" style="color:${DOT_COLORS[idx]}">${MONO_ICONS[idx]}</div>`;
 
   return `

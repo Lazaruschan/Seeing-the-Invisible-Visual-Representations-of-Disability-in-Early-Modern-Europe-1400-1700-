@@ -1,45 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Disability in Western Art — Visual Database</title>
-  <meta name="description" content="An online database of 40 artworks depicting disability in Western art history, organised into four thematic categories.">
-
-  <meta property="og:title" content="Disability in Western Art — Visual Database">
-  <meta property="og:description" content="A research database of 40 artworks examining disability in Western visual history.">
-  <meta property="og:type" content="website">
-
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Database Templates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
+    <div class="max-w-4xl w-full">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">HKBU VR Project</h1>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">Web Database Templates Directory. Please select a template below to view its design.</p>
+        </header>
 
-  <!-- Navigation -->
-  <nav class="nav" role="navigation" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a class="nav-logo" href="#" data-nav="#">
-        <span class="nav-logo-stripe" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </span>
-        Disability in Western Art
-      </a>
-      <ul class="nav-links" role="list">
-        <li><a href="#categories" data-nav="#categories">Collection</a></li>
-        <li><a href="#category/group-1" data-nav="#category/group-1">Healing</a></li>
-        <li><a href="#category/group-2" data-nav="#category/group-2">Social Life</a></li>
-        <li><a href="#category/group-3" data-nav="#category/group-3">Portraiture</a></li>
-        <li><a href="#category/group-4" data-nav="#category/group-4">Creative Practice</a></li>
-        <li><a class="nav-cta" href="#vr-gallery">VR Gallery →</a></li>
-      </ul>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Template 1 -->
+            <a href="WebDatabase_Template1/index.html" class="card-hover bg-white rounded-2xl overflow-hidden border border-slate-200 flex flex-col group cursor-pointer">
+                <div class="h-48 w-full overflow-hidden bg-slate-100">
+                    <img src="assets/I/1. El Greco, Christ Healing the Blind, 1570, Metropolitan Museum, New York..jpg" alt="El Greco, Christ Healing the Blind" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.style.display='none'">
+                </div>
+                <div class="p-8 text-center flex-grow flex flex-col justify-center">
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">Template 1</h2>
+                    <p class="text-slate-500 text-sm">View the first web database design template.</p>
+                </div>
+            </a>
+
+            <!-- Template 2 -->
+            <a href="WebDatabase_Template2/index.html" class="card-hover bg-white rounded-2xl overflow-hidden border border-slate-200 flex flex-col group cursor-pointer">
+                <div class="h-48 w-full overflow-hidden bg-slate-100">
+                    <img src="assets/II/1. Hieronymus Bosh, The Extraction of the Stone of Madness. ca 1494. Museo del Prado, Madrid..jpg" alt="Hieronymus Bosch, The Extraction of the Stone of Madness" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.style.display='none'">
+                </div>
+                <div class="p-8 text-center flex-grow flex flex-col justify-center">
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">Template 2</h2>
+                    <p class="text-slate-500 text-sm">View the second web database design template.</p>
+                </div>
+            </a>
+
+            <!-- Template 3 -->
+            <a href="WebDatabase_Template3/index.html" class="card-hover bg-white rounded-2xl overflow-hidden border border-slate-200 flex flex-col group cursor-pointer">
+                <div class="h-48 w-full overflow-hidden bg-slate-100">
+                    <img src="assets/III/1.%20Lavinia%20Fontana%2C%20Portrait%20of%20Antonietta%20Gonzalez.%201595%2C%20Cha%CC%82teau%20de%20Blois%2C%20Blois..jpg" alt="Lavinia Fontana, Portrait of Antonietta Gonzalez" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.style.display='none'">
+                </div>
+                <div class="p-8 text-center flex-grow flex flex-col justify-center">
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">Template 3</h2>
+                    <p class="text-slate-500 text-sm">View the third web database design template.</p>
+                </div>
+            </a>
+        </div>
+
+        <footer class="mt-16 text-center text-slate-400 text-sm">
+            <p>&copy; 2026 HKBU VR Project - Angelo Lo Conte</p>
+        </footer>
     </div>
-  </nav>
-
-  <!-- Main App -->
-  <main id="app" role="main" aria-live="polite">
-    <!-- Rendered by app.js -->
-  </main>
-
-  <script src="data.js"></script>
-  <script src="app.js"></script>
 </body>
 </html>
