@@ -2,36 +2,74 @@
 setlocal EnableExtensions EnableDelayedExpansion
 
 REM Publish WebDatabase_12SEP2026 to GitHub Pages repo (main branch).
-REM Usage:
-REM   publish.bat
-REM   publish.bat ghp_YOUR_TOKEN
-REM   set GH_TOKEN=ghp_... && publish.bat
-REM
-REM Optional local secret file (gitignored): .publish-token
+REM Interactive prompts for GitHub username + personal access token.
+REM Optional overrides:
+REM   publish.bat [username] [token]
+REM   set GH_USER=... & set GH_TOKEN=... & publish.bat
+REM   .publish-token file (gitignored) for token only
 
 cd /d "%~dp0"
 set "SRC=%~dp0"
 if "%SRC:~-1%"=="\" set "SRC=%SRC:~0,-1%"
 
-set "REPO_SLUG=Lazaruschan/Seeing-the-Invisible-Visual-Representations-of-Disability-in-Early-Modern-Europe-1400-1700-"
+set "REPO_NAME=Seeing-the-Invisible-Visual-Representations-of-Disability-in-Early-Modern-Europe-1400-1700-"
 set "BRANCH=main"
-set "GH_USER=Lazaruschan"
+set "DEFAULT_USER=Lazaruschan"
 
-if not "%~1"=="" set "GH_TOKEN=%~1"
-if "%GH_TOKEN%"=="" if exist "%~dp0.publish-token" (
-  set /p GH_TOKEN=<"%~dp0.publish-token"
+echo.
+echo ============================================================
+echo   WebDatabase_12SEP2026 — Publish to GitHub Pages
+echo ============================================================
+echo   Target repo: %DEFAULT_USER%/%REPO_NAME%
+echo   ^(or your fork under the username you enter^)
+echo.
+echo   Create a PAT with "repo" + "workflow" scopes:
+echo   https://github.com/settings/tokens
+echo ============================================================
+echo.
+
+REM --- Username ---
+if not "%~1"=="" set "GH_USER=%~1"
+if "%GH_USER%"=="" (
+  set /p "GH_USER=GitHub username [%DEFAULT_USER%]: "
+)
+if "%GH_USER%"=="" set "GH_USER=%DEFAULT_USER%"
+set "GH_USER=!GH_USER: =!"
+
+REM --- Token ---
+if not "%~2"=="" set "GH_TOKEN=%~2"
+if "%GH_TOKEN%"=="" if exist "%SRC%\.publish-token" (
+  set /p GH_TOKEN=<"%SRC%\.publish-token"
 )
 
 if "%GH_TOKEN%"=="" (
   echo.
-  echo ERROR: GitHub token required.
-  echo   1^) set GH_TOKEN=ghp_...
-  echo   2^) publish.bat ghp_...
-  echo   3^) put token in .publish-token ^(gitignored^)
+  echo Enter your GitHub personal access token ^(input is hidden^).
+  echo The token is used only for this publish run and is not saved.
   echo.
-  echo Create a fine-grained or classic PAT with "repo" + "workflow" scopes:
-  echo   https://github.com/settings/tokens
+  call :ReadSecret GH_TOKEN "GitHub token (ghp_...): "
+)
+
+if "%GH_TOKEN%"=="" (
+  echo.
+  echo ERROR: GitHub token is required.
   exit /b 1
+)
+
+set "REPO_SLUG=%GH_USER%/%REPO_NAME%"
+set "SITE_HOST=https://%GH_USER%.github.io"
+REM GitHub Pages lowercases the user host; keep path as repo name
+set "SITE_URL=%SITE_HOST%/%REPO_NAME%/"
+
+echo.
+echo Username : %GH_USER%
+echo Repo     : https://github.com/%REPO_SLUG%
+echo Branch   : %BRANCH%
+echo.
+set /p "CONFIRM=Publish now? [Y/n]: "
+if /I "%CONFIRM%"=="n" (
+  echo Cancelled.
+  exit /b 0
 )
 
 where git >nul 2>&1
@@ -47,7 +85,7 @@ echo.
 echo === Cloning %REPO_SLUG% ===
 git clone --depth 1 --branch %BRANCH% "%REMOTE%" "%WORK%"
 if errorlevel 1 (
-  echo Clone failed. Check token permissions and repo access.
+  echo Clone failed. Check username, token permissions, and repo access.
   exit /b 1
 )
 
@@ -118,9 +156,21 @@ rd /s /q "%WORK%" 2>nul
 
 echo.
 echo Done.
-echo Repo:   https://github.com/%REPO_SLUG%
-echo Site:   https://lazaruschan.github.io/Seeing-the-Invisible-Visual-Representations-of-Disability-in-Early-Modern-Europe-1400-1700-/
+echo Repo:    https://github.com/%REPO_SLUG%
+echo Site:    %SITE_URL%
 echo Actions: https://github.com/%REPO_SLUG%/actions
 echo.
 echo If Pages is first-time: Settings -^> Pages -^> Source = GitHub Actions.
+exit /b 0
+
+REM ---------------------------------------------------------------------------
+REM ReadSecret VARNAME "Prompt text"
+REM Uses PowerShell SecureString so the token is not echoed on screen.
+REM ---------------------------------------------------------------------------
+:ReadSecret
+set "_rsVar=%~1"
+set "_rsPrompt=%~2"
+for /f "usebackq delims=" %%T in (`powershell -NoProfile -Command "$p=Read-Host -AsSecureString '%_rsPrompt%'; $b=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); try { [Runtime.InteropServices.Marshal]::PtrToStringBSTR($b) } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($b) }"`) do set "%_rsVar%=%%T"
+set "_rsVar="
+set "_rsPrompt="
 exit /b 0
