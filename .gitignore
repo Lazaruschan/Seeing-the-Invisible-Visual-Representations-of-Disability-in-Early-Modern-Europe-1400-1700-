@@ -1,0 +1,15 @@
+# Local publish secrets — never commit
+.publish-token
+.env
+.env.*
+*.pem
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Local git clone scratch (if scripts leave one)
+.publish-work/
