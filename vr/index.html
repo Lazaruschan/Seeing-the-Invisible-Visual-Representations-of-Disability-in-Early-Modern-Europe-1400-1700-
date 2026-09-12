@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VR Gallery — Disability in Western Art</title>
+  <meta name="description" content="Browser and WebXR walkthrough of the HKBU VR teaching gallery.">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="hud">
+    <header class="hud-top">
+      <a class="hud-back" href="../index.html#vr-gallery">← Back to site</a>
+      <div class="hud-title-block">
+        <p class="hud-eyebrow">HKBU · Virtual Gallery</p>
+        <h1 class="hud-title">Disability in Western Art</h1>
+      </div>
+      <div id="xr-button-slot"></div>
+    </header>
+
+    <div id="reticle" class="reticle" aria-hidden="true">
+      <span class="reticle-ring"></span>
+      <span class="reticle-dot"></span>
+    </div>
+    <p id="lookHint" class="look-hint" hidden></p>
+
+    <p class="hud-hint" id="hudHint">Click to look · WASD to walk · Aim at a painting · click / E for details</p>
+  </div>
+
+  <div id="intro-slot" class="intro-slot" hidden>
+    <video id="introVideo" controls playsinline></video>
+    <button type="button" class="intro-dismiss" id="introDismiss">Enter gallery</button>
+  </div>
+
+  <div id="artwork-panel" class="artwork-panel" hidden>
+    <button type="button" class="panel-close" id="panelClose" aria-label="Close">×</button>
+    <p class="panel-eyebrow">Artwork</p>
+    <h2 class="panel-title" id="panelTitle"></h2>
+    <p class="panel-meta" id="panelMeta"></p>
+    <p class="panel-summary" id="panelSummary"></p>
+    <div class="panel-actions">
+      <a class="btn-primary" id="panelEssay" href="#" target="_blank" rel="noopener">Open full essay →</a>
+      <button type="button" class="btn-ghost" id="panelCloseBtn">Close</button>
+    </div>
+  </div>
+
+  <div id="load-overlay" class="load-overlay">
+    <div class="load-inner">
+      <p class="blocker-eyebrow">Loading VR gallery</p>
+      <h2>Gallery model</h2>
+      <p id="loadStatus">Preparing…</p>
+      <div class="load-track" aria-hidden="true"><div class="load-bar" id="loadBar"></div></div>
+      <p class="load-note">Loading optimized wireframe gallery (~21 MB).</p>
+    </div>
+  </div>
+
+  <div id="blocker">
+    <div class="blocker-inner">
+      <p class="blocker-eyebrow">Browser VR Gallery</p>
+      <h2>Enter the gallery</h2>
+      <p>C4D ver6 hub · four corridors · twenty works · essays on the catalogue site</p>
+      <button type="button" class="btn-primary" id="startBtn">Click to start</button>
+    </div>
+  </div>
+
+  <script src="../data.js"></script>
+  <script type="module" src="gallery.js"></script>
+</body>
+</html>

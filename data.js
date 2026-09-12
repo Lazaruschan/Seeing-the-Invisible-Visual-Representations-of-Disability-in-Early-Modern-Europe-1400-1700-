@@ -13,8 +13,9 @@ const DATABASE = {
       email: "—",
       note: "Contact details to be confirmed. Placeholder fields for review.",
     },
-    vrGalleryUrl: null,
-    vrGalleryNote: "Browser VR gallery link will be added when the environment is ready to launch.",
+    vrGalleryUrl: "vr/",
+    vrGalleryNote: "Walk the four corridors in your browser, or enter immersive VR on a compatible headset.",
+    introVideoUrl: null,
   },
   artworks: [
     {

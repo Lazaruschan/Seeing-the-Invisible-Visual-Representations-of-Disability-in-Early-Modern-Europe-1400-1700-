@@ -1,115 +1,235 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
-REM Publish WebDatabase_12SEP2026 to GitHub Pages repo (main branch).
-REM Interactive prompts for GitHub username + personal access token.
-REM Optional overrides:
-REM   publish.bat [username] [token]
-REM   set GH_USER=... & set GH_TOKEN=... & publish.bat
-REM   .publish-token file (gitignored) for token only
+REM Publish WebDatabase_12SEP2026 to GitHub Pages (main).
+REM
+REM Usage:
+REM   publish.bat
+REM   publish.bat [username] [token] [/Y]
+REM   set GH_USER=... & set GH_TOKEN=... & set PUBLISH_YES=1 & publish.bat
+REM   Token file: .publish-token (gitignored)
+REM
+REM Publishes:
+REM   - catalogue site + VR gallery (wireframe, center reticle, Draco GLB)
+REM   - vr\assets\gallery_scene_vr_ver6_12SEP2026_web-optimized.glb (~21 MB)
+REM Skips:
+REM   - gallery_scene_vr_ver6_12SEP2026.glb / _web.glb (~360 MB each)
+REM   - .publish-token, .env*
 
 cd /d "%~dp0"
 set "SRC=%~dp0"
 if "%SRC:~-1%"=="\" set "SRC=%SRC:~0,-1%"
+REM #region agent log
+set "DBGLOG=%~dp0..\..\debug-dcf844.log"
+call :DbgLog "A" "publish.bat:start" "script started" "cwd=!CD!"
+REM #endregion
 
 set "REPO_NAME=Seeing-the-Invisible-Visual-Representations-of-Disability-in-Early-Modern-Europe-1400-1700-"
 set "BRANCH=main"
 set "DEFAULT_USER=Lazaruschan"
+set "OPT_GLB=vr\assets\gallery_scene_vr_ver6_12SEP2026_web-optimized.glb"
 
 echo.
 echo ============================================================
-echo   WebDatabase_12SEP2026 — Publish to GitHub Pages
+echo   WebDatabase_12SEP2026 - Publish to GitHub Pages
 echo ============================================================
-echo   Target repo: %DEFAULT_USER%/%REPO_NAME%
-echo   ^(or your fork under the username you enter^)
-echo.
-echo   Create a PAT with "repo" + "workflow" scopes:
-echo   https://github.com/settings/tokens
+echo   Includes: catalogue + wireframe VR + optimized GLB
+echo   Skips:    360 MB unoptimized GLBs, secrets
+echo   Token:    repo + workflow  https://github.com/settings/tokens
 echo ============================================================
 echo.
+
+if not exist "%SRC%\%OPT_GLB%" (
+  REM #region agent log
+  call :DbgLog "A" "publish.bat:opt-glb" "OPT_GLB missing" "path=%SRC%\%OPT_GLB%"
+  REM #endregion
+  echo ERROR: Missing optimized VR model:
+  echo   %SRC%\%OPT_GLB%
+  echo Copy gallery_scene_vr_ver6_12SEP2026_web-optimized.glb into vr\assets\ first.
+  echo.
+  pause
+  exit /b 1
+)
+REM #region agent log
+call :DbgLog "A" "publish.bat:opt-glb" "OPT_GLB present" "ok=1"
+REM #endregion
 
 REM --- Username ---
 if not "%~1"=="" set "GH_USER=%~1"
 if "%GH_USER%"=="" (
-  set /p "GH_USER=GitHub username [%DEFAULT_USER%]: "
+  if /I "%PUBLISH_YES%"=="1" (
+    set "GH_USER=%DEFAULT_USER%"
+  ) else (
+    set /p "GH_USER=GitHub username [%DEFAULT_USER%]: "
+  )
 )
 if "%GH_USER%"=="" set "GH_USER=%DEFAULT_USER%"
 set "GH_USER=!GH_USER: =!"
+REM #region agent log
+call :DbgLog "C" "publish.bat:user" "username resolved" "user=!GH_USER!"
+REM #endregion
 
 REM --- Token ---
-if not "%~2"=="" set "GH_TOKEN=%~2"
+set "TOKEN_SRC=none"
+if not "%~2"=="" (
+  set "GH_TOKEN=%~2"
+  set "TOKEN_SRC=arg"
+)
 if "%GH_TOKEN%"=="" if exist "%SRC%\.publish-token" (
-  set /p GH_TOKEN=<"%SRC%\.publish-token"
+  for /f "usebackq delims=" %%T in (`powershell -NoProfile -Command "(Get-Content -LiteralPath '%SRC%\.publish-token' -Raw).Trim()"`) do set "GH_TOKEN=%%T"
+  set "TOKEN_SRC=file"
 )
-
 if "%GH_TOKEN%"=="" (
   echo.
-  echo Enter your GitHub personal access token ^(input is hidden^).
-  echo The token is used only for this publish run and is not saved.
+  echo Paste your GitHub personal access token below, then press Enter.
+  echo Create one with "repo" + "workflow" scopes:
+  echo   https://github.com/settings/tokens
   echo.
-  call :ReadSecret GH_TOKEN "GitHub token (ghp_...): "
+  REM #region agent log
+  call :DbgLog "B" "publish.bat:token-prompt" "prompting for token via set /p" "src=prompt"
+  REM #endregion
+  set /p "GH_TOKEN=GitHub token (ghp_... or github_pat_...): "
+  set "TOKEN_SRC=prompt"
 )
-
-if "%GH_TOKEN%"=="" (
+REM trim spaces
+if defined GH_TOKEN set "GH_TOKEN=!GH_TOKEN: =!"
+REM #region agent log
+set "TOKEN_LEN=0"
+if defined GH_TOKEN (
+  set "TOKEN_TMP=!GH_TOKEN!"
+  call :TokenMeta
+)
+call :DbgLog "B" "publish.bat:token-resolved" "token metadata only" "source=!TOKEN_SRC! len=!TOKEN_LEN! prefix=!TOKEN_PREFIX!"
+REM #endregion
+if "!GH_TOKEN!"=="" (
+  REM #region agent log
+  call :DbgLog "B" "publish.bat:token-empty" "token empty after resolve" "source=!TOKEN_SRC!"
+  REM #endregion
   echo.
   echo ERROR: GitHub token is required.
+  echo   Type the token at the prompt, or:
+  echo   set GH_TOKEN=ghp_... ^& set PUBLISH_YES=1 ^& publish.bat
+  echo   or put the token in .publish-token
+  echo.
+  pause
   exit /b 1
 )
 
 set "REPO_SLUG=%GH_USER%/%REPO_NAME%"
-set "SITE_HOST=https://%GH_USER%.github.io"
-REM GitHub Pages lowercases the user host; keep path as repo name
-set "SITE_URL=%SITE_HOST%/%REPO_NAME%/"
+set "SITE_URL=https://%GH_USER%.github.io/%REPO_NAME%/"
 
 echo.
 echo Username : %GH_USER%
 echo Repo     : https://github.com/%REPO_SLUG%
 echo Branch   : %BRANCH%
+echo Model    : %OPT_GLB%
 echo.
-set /p "CONFIRM=Publish now? [Y/n]: "
-if /I "%CONFIRM%"=="n" (
-  echo Cancelled.
-  exit /b 0
+
+if /I not "%PUBLISH_YES%"=="1" if /I not "%~3"=="/Y" if /I not "%~3"=="-y" if /I not "%~1"=="/Y" (
+  set /p "CONFIRM=Publish now? [Y/n]: "
+  if /I "!CONFIRM!"=="n" (
+    REM #region agent log
+    call :DbgLog "E" "publish.bat:cancelled" "user cancelled confirm" "confirm=!CONFIRM!"
+    REM #endregion
+    echo Cancelled.
+    echo.
+    pause
+    exit /b 0
+  )
 )
+REM #region agent log
+call :DbgLog "E" "publish.bat:confirmed" "proceeding past confirm" "publish_yes=%PUBLISH_YES%"
+REM #endregion
 
 where git >nul 2>&1
 if errorlevel 1 (
   echo ERROR: git is not installed or not on PATH.
+  echo.
+  pause
+  exit /b 1
+)
+where robocopy >nul 2>&1
+if errorlevel 1 (
+  echo ERROR: robocopy not found.
+  echo.
+  pause
   exit /b 1
 )
 
-set "WORK=%TEMP%\webdb_publish_%RANDOM%"
-set "REMOTE=https://x-access-token:%GH_TOKEN%@github.com/%REPO_SLUG%.git"
+set "WORK=%TEMP%\webdb_publish_%RANDOM%%RANDOM%"
+if exist "%WORK%" rd /s /q "%WORK%" 2>nul
+
+set "GIT_TERMINAL_PROMPT=0"
+set "GCM_INTERACTIVE=never"
+REM Clone without credentials (public repo). Token only used for push.
+set "REMOTE_PUBLIC=https://github.com/!REPO_SLUG!.git"
+set "REMOTE_AUTH=https://x-access-token:!GH_TOKEN!@github.com/!REPO_SLUG!.git"
+set "CLONE_ERR=%TEMP%\webdb_clone_err_%RANDOM%.txt"
 
 echo.
 echo === Cloning %REPO_SLUG% ===
-git clone --depth 1 --branch %BRANCH% "%REMOTE%" "%WORK%"
-if errorlevel 1 (
-  echo Clone failed. Check username, token permissions, and repo access.
+REM #region agent log
+call :DbgLog "J" "publish.bat:clone-start" "starting public clone no-token" "slug=!REPO_SLUG! branch=!BRANCH! auth=none"
+REM #endregion
+git -c credential.helper= clone --depth 1 --branch %BRANCH% "!REMOTE_PUBLIC!" "%WORK%" 2>"%CLONE_ERR%"
+set "CLONE_EC=!ERRORLEVEL!"
+REM #region agent log
+call :DbgLog "J" "publish.bat:clone-exit" "git clone returned" "ec=!CLONE_EC!"
+REM #endregion
+if !CLONE_EC! NEQ 0 (
+  REM #region agent log
+  call :DbgLog "J" "publish.bat:clone-fail" "git clone failed" "ec=!CLONE_EC!"
+  REM #endregion
+  echo.
+  echo Clone failed. Check network and that the repo exists.
+  if exist "%CLONE_ERR%" type "%CLONE_ERR%"
+  echo.
+  pause
   exit /b 1
 )
-
+REM #region agent log
+call :DbgLog "J" "publish.bat:clone-ok" "git clone succeeded" "work=!WORK!"
+REM #endregion
+if exist "%CLONE_ERR%" del /f /q "%CLONE_ERR%" 2>nul
 echo.
-echo === Replacing site files with this package ===
+echo === Replacing site files ===
 pushd "%WORK%"
-for /f "delims=" %%F in ('dir /a /b') do (
+for /f "delims=" %%F in ('dir /a /b 2^>nul') do (
   if /I not "%%F"==".git" (
     if exist "%%F\" (
-      rd /s /q "%%F"
+      rd /s /q "%%F" 2>nul
     ) else (
-      del /f /q "%%F"
+      del /f /q "%%F" 2>nul
     )
   )
 )
 popd
 
-REM Copy package contents (exclude local secrets / work dirs)
-REM Note: trailing backslash on paths breaks quoting — SRC has it stripped above.
-robocopy "%SRC%" "%WORK%" /E /XD .git .publish-work /XF .publish-token .env /NFL /NDL /NJH /NJS /NC /NS /NP
+robocopy "%SRC%" "%WORK%" /E ^
+  /XD .git .publish-work ^
+  /XF .publish-token .env .env.local .env.* ^
+     gallery_scene_vr_ver6_12SEP2026.glb ^
+     gallery_scene_vr_ver6_12SEP2026_web.glb ^
+  /NFL /NDL /NJH /NJS /NC /NS /NP
 set "RC=%ERRORLEVEL%"
 if %RC% GEQ 8 (
   echo robocopy failed with code %RC%
   rd /s /q "%WORK%" 2>nul
+  echo.
+  pause
+  exit /b 1
+)
+
+REM Drop oversized / unoptimized leftovers; keep optimized GLB
+if exist "%WORK%\vr\assets\gallery_scene_vr_ver6_12SEP2026.glb" del /f /q "%WORK%\vr\assets\gallery_scene_vr_ver6_12SEP2026.glb" 2>nul
+if exist "%WORK%\vr\assets\gallery_scene_vr_ver6_12SEP2026_web.glb" del /f /q "%WORK%\vr\assets\gallery_scene_vr_ver6_12SEP2026_web.glb" 2>nul
+powershell -NoProfile -Command "$root = [Environment]::GetEnvironmentVariable('WORK','Process'); if (-not $root) { $root = '%WORK%' }; Get-ChildItem -LiteralPath $root -Recurse -File -EA SilentlyContinue | Where-Object { $_.Length -gt 95MB } | ForEach-Object { Write-Host ('Removing oversized: ' + $_.Name); Remove-Item -LiteralPath $_.FullName -Force }"
+
+if not exist "%WORK%\%OPT_GLB%" (
+  echo ERROR: Optimized GLB missing after copy: %OPT_GLB%
+  rd /s /q "%WORK%" 2>nul
+  echo.
+  pause
   exit /b 1
 )
 
@@ -118,37 +238,56 @@ git config user.name "%GH_USER%"
 git config user.email "%GH_USER%@users.noreply.github.com"
 
 git add -A
+echo.
+echo === Staged changes ===
 git status --short
 
 git diff --cached --quiet
 if errorlevel 1 (
-  git commit -m "Publish WebDatabase_12SEP2026 site (20 artworks)"
+  git commit -m "Publish WebDatabase: catalogue + wireframe VR (optimized Draco GLB)"
   if errorlevel 1 (
     echo Commit failed.
     popd
     rd /s /q "%WORK%" 2>nul
+    echo.
+    pause
     exit /b 1
   )
   echo.
   echo === Pushing to origin/%BRANCH% ===
-  git push origin %BRANCH%
-  if errorlevel 1 (
-    echo Push failed.
+  REM #region agent log
+  call :DbgLog "J" "publish.bat:push-start" "starting git push via URL token" "branch=!BRANCH!"
+  REM #endregion
+  git -c credential.helper= -c http.postBuffer=524288000 push "!REMOTE_AUTH!" "HEAD:refs/heads/%BRANCH%"
+  set "PUSH_EC=!ERRORLEVEL!"
+  REM #region agent log
+  call :DbgLog "J" "publish.bat:push-exit" "git push returned" "ec=!PUSH_EC!"
+  REM #endregion
+  if !PUSH_EC! NEQ 0 (
+    REM #region agent log
+    call :DbgLog "J" "publish.bat:push-fail" "git push failed" "ec=!PUSH_EC!"
+    REM #endregion
+    echo Push failed. Check token scopes and network.
     popd
     rd /s /q "%WORK%" 2>nul
+    echo.
+    pause
     exit /b 1
   )
+  REM #region agent log
+  call :DbgLog "J" "publish.bat:push-ok" "git push succeeded" "branch=!BRANCH!"
+  REM #endregion
 ) else (
-  echo No file changes to commit — remote already matches this package.
+  echo No file changes to commit - remote already matches this package.
 )
 
 echo.
-echo === Ensuring GitHub Pages ^(Actions / root^) ===
-curl -sS -X PUT ^
+echo === Ensuring GitHub Pages (Actions) ===
+curl.exe -sS -X PUT ^
   -H "Accept: application/vnd.github+json" ^
-  -H "Authorization: Bearer %GH_TOKEN%" ^
+  -H "Authorization: Bearer !GH_TOKEN!" ^
   -H "X-GitHub-Api-Version: 2022-11-28" ^
-  https://api.github.com/repos/%REPO_SLUG%/pages ^
+  "https://api.github.com/repos/%REPO_SLUG%/pages" ^
   -d "{\"build_type\":\"workflow\",\"source\":{\"branch\":\"main\",\"path\":\"/\"}}" >nul 2>&1
 
 popd
@@ -158,19 +297,48 @@ echo.
 echo Done.
 echo Repo:    https://github.com/%REPO_SLUG%
 echo Site:    %SITE_URL%
+echo VR:      %SITE_URL%vr/
 echo Actions: https://github.com/%REPO_SLUG%/actions
 echo.
-echo If Pages is first-time: Settings -^> Pages -^> Source = GitHub Actions.
+echo First-time Pages: Settings -^> Pages -^> Source = GitHub Actions.
+REM #region agent log
+call :DbgLog "D" "publish.bat:done" "publish finished successfully" "slug=!REPO_SLUG!"
+REM #endregion
+echo.
+pause
 exit /b 0
 
-REM ---------------------------------------------------------------------------
-REM ReadSecret VARNAME "Prompt text"
-REM Uses PowerShell SecureString so the token is not echoed on screen.
-REM ---------------------------------------------------------------------------
-:ReadSecret
-set "_rsVar=%~1"
-set "_rsPrompt=%~2"
-for /f "usebackq delims=" %%T in (`powershell -NoProfile -Command "$p=Read-Host -AsSecureString '%_rsPrompt%'; $b=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); try { [Runtime.InteropServices.Marshal]::PtrToStringBSTR($b) } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($b) }"`) do set "%_rsVar%=%%T"
-set "_rsVar="
-set "_rsPrompt="
+REM #region agent log
+:TokenMeta
+set "TOKEN_LEN=0"
+set "TOKEN_PREFIX=empty"
+if not defined TOKEN_TMP exit /b 0
+set "TOKEN_PREFIX=other"
+if /I "!TOKEN_TMP:~0,4!"=="ghp_" set "TOKEN_PREFIX=ghp_"
+if /I "!TOKEN_TMP:~0,11!"=="github_pat_" set "TOKEN_PREFIX=github_pat_"
+set "TOKEN_LEN=0"
+set "_s=!TOKEN_TMP!"
+:TokenMetaLen
+if defined _s (
+  set "_s=!_s:~1!"
+  set /a TOKEN_LEN+=1
+  if !TOKEN_LEN! GEQ 200 goto TokenMetaLenDone
+  goto TokenMetaLen
+)
+:TokenMetaLenDone
+set "_s="
+set "TOKEN_TMP="
 exit /b 0
+
+:DbgLog
+set "_h=%~1"
+set "_loc=%~2"
+set "_msg=%~3"
+set "_data=%~4"
+powershell -NoProfile -Command "$p='%DBGLOG%'; $o=[ordered]@{sessionId='dcf844';hypothesisId='%_h%';location='%_loc%';message='%_msg%';data='%_data%';timestamp=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds();runId='post-fix'}; Add-Content -LiteralPath $p -Value (($o | ConvertTo-Json -Compress))" 2>nul
+set "_h="
+set "_loc="
+set "_msg="
+set "_data="
+exit /b 0
+REM #endregion

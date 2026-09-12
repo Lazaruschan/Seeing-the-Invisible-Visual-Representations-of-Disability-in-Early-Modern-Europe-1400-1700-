@@ -4,6 +4,10 @@
 .env.*
 *.pem
 
+# Large local-only VR models (keep optimized GLB for Pages)
+vr/assets/gallery_scene_vr_ver6_12SEP2026.glb
+vr/assets/gallery_scene_vr_ver6_12SEP2026_web.glb
+
 # OS / editor
 .DS_Store
 Thumbs.db

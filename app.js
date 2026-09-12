@@ -421,7 +421,7 @@ function renderVrGallery() {
             ? `<a class="btn-primary" href="${escapeHtml(project.vrGalleryUrl)}" target="_blank" rel="noopener">Launch VR Gallery →</a>`
             : `<button class="btn-primary" type="button" disabled style="opacity:0.55;cursor:not-allowed">Launch URL pending</button>`
         }
-        <p style="margin-top:20px"><span class="placeholder-note">Placeholder CTA — add browser VR URL when ready</span></p>
+        <p style="margin-top:20px;color:var(--color-text-secondary);font-size:14px;line-height:1.5">Desktop: WASD + mouse. On a Meta Quest, open this page in the headset browser and use Enter VR.</p>
       </div>
     </div>
   `;
