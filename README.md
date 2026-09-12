@@ -32,7 +32,7 @@ Immersive VR needs **HTTPS** (or `localhost`). GitHub Pages provides HTTPS after
 - Homepage A/B: carousel vs all-20 grid
 - **Three.js VR gallery** in `vr/`:
   - Architecture from `vr/assets/gallery_scene_vr_ver6_12SEP2026_web-optimized.glb` (~21 MB)
-  - **Unlit wireframe** shell (soft opacity ~0.22; WebGL line width is ~1px on most GPUs)
+  - **Edge-line** shell via `EdgesGeometry` (soft opacity; hard creases only — not full-mesh wireframe)
   - Catalogue textures reconnected onto `Art_*` canvases (upright)
   - Desktop walk + WebXR; essays at `#artwork/{id}`
 - GitHub Pages workflow: `.github/workflows/deploy-pages.yml`

@@ -19,10 +19,6 @@ REM   - .publish-token, .env*
 cd /d "%~dp0"
 set "SRC=%~dp0"
 if "%SRC:~-1%"=="\" set "SRC=%SRC:~0,-1%"
-REM #region agent log
-set "DBGLOG=%~dp0..\..\debug-dcf844.log"
-call :DbgLog "A" "publish.bat:start" "script started" "cwd=!CD!"
-REM #endregion
 
 set "REPO_NAME=Seeing-the-Invisible-Visual-Representations-of-Disability-in-Early-Modern-Europe-1400-1700-"
 set "BRANCH=main"
@@ -40,9 +36,6 @@ echo ============================================================
 echo.
 
 if not exist "%SRC%\%OPT_GLB%" (
-  REM #region agent log
-  call :DbgLog "A" "publish.bat:opt-glb" "OPT_GLB missing" "path=%SRC%\%OPT_GLB%"
-  REM #endregion
   echo ERROR: Missing optimized VR model:
   echo   %SRC%\%OPT_GLB%
   echo Copy gallery_scene_vr_ver6_12SEP2026_web-optimized.glb into vr\assets\ first.
@@ -50,9 +43,6 @@ if not exist "%SRC%\%OPT_GLB%" (
   pause
   exit /b 1
 )
-REM #region agent log
-call :DbgLog "A" "publish.bat:opt-glb" "OPT_GLB present" "ok=1"
-REM #endregion
 
 REM --- Username ---
 if not "%~1"=="" set "GH_USER=%~1"
@@ -65,19 +55,11 @@ if "%GH_USER%"=="" (
 )
 if "%GH_USER%"=="" set "GH_USER=%DEFAULT_USER%"
 set "GH_USER=!GH_USER: =!"
-REM #region agent log
-call :DbgLog "C" "publish.bat:user" "username resolved" "user=!GH_USER!"
-REM #endregion
 
 REM --- Token ---
-set "TOKEN_SRC=none"
-if not "%~2"=="" (
-  set "GH_TOKEN=%~2"
-  set "TOKEN_SRC=arg"
-)
+if not "%~2"=="" set "GH_TOKEN=%~2"
 if "%GH_TOKEN%"=="" if exist "%SRC%\.publish-token" (
   for /f "usebackq delims=" %%T in (`powershell -NoProfile -Command "(Get-Content -LiteralPath '%SRC%\.publish-token' -Raw).Trim()"`) do set "GH_TOKEN=%%T"
-  set "TOKEN_SRC=file"
 )
 if "%GH_TOKEN%"=="" (
   echo.
@@ -85,26 +67,10 @@ if "%GH_TOKEN%"=="" (
   echo Create one with "repo" + "workflow" scopes:
   echo   https://github.com/settings/tokens
   echo.
-  REM #region agent log
-  call :DbgLog "B" "publish.bat:token-prompt" "prompting for token via set /p" "src=prompt"
-  REM #endregion
   set /p "GH_TOKEN=GitHub token (ghp_... or github_pat_...): "
-  set "TOKEN_SRC=prompt"
 )
-REM trim spaces
 if defined GH_TOKEN set "GH_TOKEN=!GH_TOKEN: =!"
-REM #region agent log
-set "TOKEN_LEN=0"
-if defined GH_TOKEN (
-  set "TOKEN_TMP=!GH_TOKEN!"
-  call :TokenMeta
-)
-call :DbgLog "B" "publish.bat:token-resolved" "token metadata only" "source=!TOKEN_SRC! len=!TOKEN_LEN! prefix=!TOKEN_PREFIX!"
-REM #endregion
 if "!GH_TOKEN!"=="" (
-  REM #region agent log
-  call :DbgLog "B" "publish.bat:token-empty" "token empty after resolve" "source=!TOKEN_SRC!"
-  REM #endregion
   echo.
   echo ERROR: GitHub token is required.
   echo   Type the token at the prompt, or:
@@ -128,18 +94,12 @@ echo.
 if /I not "%PUBLISH_YES%"=="1" if /I not "%~3"=="/Y" if /I not "%~3"=="-y" if /I not "%~1"=="/Y" (
   set /p "CONFIRM=Publish now? [Y/n]: "
   if /I "!CONFIRM!"=="n" (
-    REM #region agent log
-    call :DbgLog "E" "publish.bat:cancelled" "user cancelled confirm" "confirm=!CONFIRM!"
-    REM #endregion
     echo Cancelled.
     echo.
     pause
     exit /b 0
   )
 )
-REM #region agent log
-call :DbgLog "E" "publish.bat:confirmed" "proceeding past confirm" "publish_yes=%PUBLISH_YES%"
-REM #endregion
 
 where git >nul 2>&1
 if errorlevel 1 (
@@ -168,18 +128,9 @@ set "CLONE_ERR=%TEMP%\webdb_clone_err_%RANDOM%.txt"
 
 echo.
 echo === Cloning %REPO_SLUG% ===
-REM #region agent log
-call :DbgLog "J" "publish.bat:clone-start" "starting public clone no-token" "slug=!REPO_SLUG! branch=!BRANCH! auth=none"
-REM #endregion
 git -c credential.helper= clone --depth 1 --branch %BRANCH% "!REMOTE_PUBLIC!" "%WORK%" 2>"%CLONE_ERR%"
 set "CLONE_EC=!ERRORLEVEL!"
-REM #region agent log
-call :DbgLog "J" "publish.bat:clone-exit" "git clone returned" "ec=!CLONE_EC!"
-REM #endregion
 if !CLONE_EC! NEQ 0 (
-  REM #region agent log
-  call :DbgLog "J" "publish.bat:clone-fail" "git clone failed" "ec=!CLONE_EC!"
-  REM #endregion
   echo.
   echo Clone failed. Check network and that the repo exists.
   if exist "%CLONE_ERR%" type "%CLONE_ERR%"
@@ -187,10 +138,8 @@ if !CLONE_EC! NEQ 0 (
   pause
   exit /b 1
 )
-REM #region agent log
-call :DbgLog "J" "publish.bat:clone-ok" "git clone succeeded" "work=!WORK!"
-REM #endregion
 if exist "%CLONE_ERR%" del /f /q "%CLONE_ERR%" 2>nul
+
 echo.
 echo === Replacing site files ===
 pushd "%WORK%"
@@ -255,18 +204,9 @@ if errorlevel 1 (
   )
   echo.
   echo === Pushing to origin/%BRANCH% ===
-  REM #region agent log
-  call :DbgLog "J" "publish.bat:push-start" "starting git push via URL token" "branch=!BRANCH!"
-  REM #endregion
   git -c credential.helper= -c http.postBuffer=524288000 push "!REMOTE_AUTH!" "HEAD:refs/heads/%BRANCH%"
   set "PUSH_EC=!ERRORLEVEL!"
-  REM #region agent log
-  call :DbgLog "J" "publish.bat:push-exit" "git push returned" "ec=!PUSH_EC!"
-  REM #endregion
   if !PUSH_EC! NEQ 0 (
-    REM #region agent log
-    call :DbgLog "J" "publish.bat:push-fail" "git push failed" "ec=!PUSH_EC!"
-    REM #endregion
     echo Push failed. Check token scopes and network.
     popd
     rd /s /q "%WORK%" 2>nul
@@ -274,9 +214,6 @@ if errorlevel 1 (
     pause
     exit /b 1
   )
-  REM #region agent log
-  call :DbgLog "J" "publish.bat:push-ok" "git push succeeded" "branch=!BRANCH!"
-  REM #endregion
 ) else (
   echo No file changes to commit - remote already matches this package.
 )
@@ -301,44 +238,6 @@ echo VR:      %SITE_URL%vr/
 echo Actions: https://github.com/%REPO_SLUG%/actions
 echo.
 echo First-time Pages: Settings -^> Pages -^> Source = GitHub Actions.
-REM #region agent log
-call :DbgLog "D" "publish.bat:done" "publish finished successfully" "slug=!REPO_SLUG!"
-REM #endregion
 echo.
 pause
 exit /b 0
-
-REM #region agent log
-:TokenMeta
-set "TOKEN_LEN=0"
-set "TOKEN_PREFIX=empty"
-if not defined TOKEN_TMP exit /b 0
-set "TOKEN_PREFIX=other"
-if /I "!TOKEN_TMP:~0,4!"=="ghp_" set "TOKEN_PREFIX=ghp_"
-if /I "!TOKEN_TMP:~0,11!"=="github_pat_" set "TOKEN_PREFIX=github_pat_"
-set "TOKEN_LEN=0"
-set "_s=!TOKEN_TMP!"
-:TokenMetaLen
-if defined _s (
-  set "_s=!_s:~1!"
-  set /a TOKEN_LEN+=1
-  if !TOKEN_LEN! GEQ 200 goto TokenMetaLenDone
-  goto TokenMetaLen
-)
-:TokenMetaLenDone
-set "_s="
-set "TOKEN_TMP="
-exit /b 0
-
-:DbgLog
-set "_h=%~1"
-set "_loc=%~2"
-set "_msg=%~3"
-set "_data=%~4"
-powershell -NoProfile -Command "$p='%DBGLOG%'; $o=[ordered]@{sessionId='dcf844';hypothesisId='%_h%';location='%_loc%';message='%_msg%';data='%_data%';timestamp=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds();runId='post-fix'}; Add-Content -LiteralPath $p -Value (($o | ConvertTo-Json -Compress))" 2>nul
-set "_h="
-set "_loc="
-set "_msg="
-set "_data="
-exit /b 0
-REM #endregion

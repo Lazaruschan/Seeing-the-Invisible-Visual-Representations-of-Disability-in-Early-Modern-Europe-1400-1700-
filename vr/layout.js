@@ -105,8 +105,9 @@ export async function buildGallery(scene, artworks, opts = {}) {
     await placeMissingArtworks(root, model, artworks, artworksMeshes, assetBase, wired);
   }
 
-  // Architecture as unlit wireframe; canvases stay solid (MeshBasic — no PBR)
-  applyWireframeArchitecture(model);
+  // Architecture as EdgesGeometry lines (not full-mesh wireframe); canvases stay solid
+  onProgress(0.95, "Building edge lines…");
+  await applyEdgesArchitecture(model, onProgress);
 
   const uniqueIds = new Set(
     artworksMeshes.filter((o) => o.userData?.kind === "artwork").map((o) => o.userData.id)
@@ -114,7 +115,7 @@ export async function buildGallery(scene, artworks, opts = {}) {
   onProgress(0.97, `Linked ${uniqueIds.size} artworks`);
 
   buildWalkColliders(colliders);
-  // Unlit wireframe + MeshBasic paintings — no scene lights needed
+  // Unlit edge lines + MeshBasic paintings — no scene lights needed
   onProgress(1, "Ready");
 
   return {
@@ -254,27 +255,32 @@ async function reconnectArtworksLikeUnity(model, artworks, artworksMeshes, asset
   return count;
 }
 
+/** Degrees — higher keeps only sharper creases (fewer lines, cheaper). */
+const ARCH_EDGE_THRESHOLD = 20;
+
 /**
- * Replace architecture materials with unlit wireframe (no PBR). Art canvases stay solid.
- * Note: WebGL linewidth is effectively 1px on most platforms; opacity is the main softener.
+ * Replace architecture triangle meshes with EdgesGeometry LineSegments.
+ * Much cheaper than MeshBasic wireframe on dense GLBs (hard edges only, no triangle overdraw).
+ * Art canvases stay solid MeshBasic.
  * @param {THREE.Object3D} model
+ * @param {(ratio: number, status: string) => void} [onProgress]
  */
-function applyWireframeArchitecture(model) {
-  const wireMat = new THREE.MeshBasicMaterial({
+async function applyEdgesArchitecture(model, onProgress = () => {}) {
+  const edgeMat = new THREE.LineBasicMaterial({
     color: 0x8a8278,
-    wireframe: true,
     transparent: true,
-    opacity: 0.22,
+    opacity: 0.38,
     depthWrite: false,
     toneMapped: false,
   });
-  // Hint only — ignored on most Windows/WebGL implementations (always ~1px)
-  wireMat.wireframeLinewidth = 0.5;
+  const hiddenMat = new THREE.MeshBasicMaterial({ visible: false });
+
+  /** @type {THREE.Mesh[]} */
+  const archMeshes = [];
 
   model.traverse((obj) => {
     if (!obj.isMesh) return;
     if (obj.userData?.isArtworkCanvas || obj.userData?.kind === "artwork") {
-      // Ensure canvases stay solid MeshBasic even if reconnect left a Standard mat
       if (obj.material && !obj.material.isMeshBasicMaterial && obj.material.map) {
         obj.material = new THREE.MeshBasicMaterial({
           map: obj.material.map,
@@ -290,10 +296,62 @@ function applyWireframeArchitecture(model) {
     // Invisible pick volumes
     if (obj.material && obj.material.visible === false) return;
 
-    obj.material = wireMat;
-    obj.castShadow = false;
-    obj.receiveShadow = false;
+    archMeshes.push(obj);
   });
+
+  const chunk = 32;
+  for (let i = 0; i < archMeshes.length; i++) {
+    const mesh = archMeshes[i];
+    const parent = mesh.parent;
+    const srcGeo = mesh.geometry;
+    if (!parent || !srcGeo) continue;
+
+    let edges;
+    try {
+      edges = new THREE.EdgesGeometry(srcGeo, ARCH_EDGE_THRESHOLD);
+    } catch {
+      mesh.visible = false;
+      continue;
+    }
+
+    const pos = edges.getAttribute("position");
+    if (!pos || pos.count === 0) {
+      edges.dispose();
+      srcGeo.dispose();
+      mesh.geometry = new THREE.BufferGeometry();
+      mesh.material = hiddenMat;
+      continue;
+    }
+
+    const lines = new THREE.LineSegments(edges, edgeMat);
+    lines.name = `${mesh.name || "arch"}_edges`;
+    lines.castShadow = false;
+    lines.receiveShadow = false;
+
+    // Keep hierarchy if this mesh has children; otherwise swap in place
+    if (mesh.children.length > 0) {
+      mesh.add(lines);
+      srcGeo.dispose();
+      mesh.geometry = new THREE.BufferGeometry();
+      mesh.material = hiddenMat;
+    } else {
+      lines.position.copy(mesh.position);
+      lines.quaternion.copy(mesh.quaternion);
+      lines.scale.copy(mesh.scale);
+      parent.add(lines);
+      srcGeo.dispose();
+      parent.remove(mesh);
+    }
+
+    mesh.castShadow = false;
+    mesh.receiveShadow = false;
+
+    if (i % chunk === chunk - 1 || i === archMeshes.length - 1) {
+      const t = 0.95 + (0.02 * (i + 1)) / Math.max(archMeshes.length, 1);
+      onProgress(t, `Building edge lines… ${i + 1}/${archMeshes.length}`);
+      await new Promise((r) => setTimeout(r, 0));
+    }
+  }
 }
 
 /**
@@ -439,15 +497,13 @@ async function placeMissingArtworks(root, model, artworks, artworksMeshes, asset
   const along = [14.5, 18.875, 23.25, 27.625, 32.0];
   const eyeY = 1.55;
   const hangOffset = 4.56;
-  const frameMat = new THREE.MeshBasicMaterial({
+  const frameMat = new THREE.LineBasicMaterial({
     color: 0x9a8b6a,
-    wireframe: true,
     transparent: true,
-    opacity: 0.28,
+    opacity: 0.4,
     depthWrite: false,
     toneMapped: false,
   });
-  frameMat.wireframeLinewidth = 0.5;
   const loader = new THREE.TextureLoader();
   const missing = artworks.filter((a) => !present.has(a.id)).sort((a, b) => a.id - b.id);
 
@@ -466,10 +522,12 @@ async function placeMissingArtworks(root, model, artworks, artworksMeshes, asset
     group.position.copy(pos);
     group.rotation.y = cfg.faceYaw;
 
-    const frame = new THREE.Mesh(
-      new THREE.BoxGeometry(widthM + 0.12, heightM + 0.12, 0.04),
+    const frameBox = new THREE.BoxGeometry(widthM + 0.12, heightM + 0.12, 0.04);
+    const frame = new THREE.LineSegments(
+      new THREE.EdgesGeometry(frameBox, ARCH_EDGE_THRESHOLD),
       frameMat
     );
+    frameBox.dispose();
     frame.position.z = -0.02;
     group.add(frame);
 
