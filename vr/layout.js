@@ -256,7 +256,7 @@ async function reconnectArtworksLikeUnity(model, artworks, artworksMeshes, asset
 }
 
 /** Degrees — higher keeps only sharper creases (fewer lines, cheaper). */
-const ARCH_EDGE_THRESHOLD = 20;
+const ARCH_EDGE_THRESHOLD = 40;
 
 /**
  * Replace architecture triangle meshes with EdgesGeometry LineSegments.
